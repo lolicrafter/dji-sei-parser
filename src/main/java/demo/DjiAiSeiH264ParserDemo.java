@@ -673,14 +673,28 @@ public class DjiAiSeiH264ParserDemo {
 
     private static class WsFramePayload {
         public String event = "sei_frame";
+        public int version;
         public long timeStampMs;
+        public int frameType;
+        public String frameExtHex;
         public int trackId;
+        public int objGroupCount;
+        public List<ParsedGroup> groups;
+        public List<ParsedTypeCount> typeCounts;
+        public int rawPayloadBytes;
         public List<WsTargetPayload> targets;
 
         static WsFramePayload from(ParsedFrame frame) {
             WsFramePayload p = new WsFramePayload();
+            p.version = frame.version;
             p.timeStampMs = frame.timeStampMs;
+            p.frameType = frame.frameType;
+            p.frameExtHex = frame.frameExtHex;
             p.trackId = frame.trackId;
+            p.objGroupCount = frame.objGroupCount;
+            p.groups = frame.groups;
+            p.typeCounts = frame.typeCounts;
+            p.rawPayloadBytes = frame.rawPayloadBytes;
             p.targets = new ArrayList<>();
             for (ParsedTarget t : frame.targets) {
                 WsTargetPayload tp = new WsTargetPayload();
@@ -691,6 +705,7 @@ public class DjiAiSeiH264ParserDemo {
                 tp.cy = t.cy;
                 tp.w = t.w;
                 tp.h = t.h;
+                tp.distanceMm = t.distanceMm;
                 tp.cxNorm = t.cxNorm;
                 tp.cyNorm = t.cyNorm;
                 tp.wNorm = t.wNorm;
@@ -709,6 +724,7 @@ public class DjiAiSeiH264ParserDemo {
         public int cy;
         public int w;
         public int h;
+        public long distanceMm;
         public double cxNorm;
         public double cyNorm;
         public double wNorm;
